@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('layout'); -%>
+    <div class="container">
+        <div class="row">
+            <%- include('sidebar'); -%>
+                <div class="col-lg-9 my-4">
+                    <h2 class="text-center">เพิ่มหมวดหมู่สินค้า</h2>
+                    <form class="" action="/categories/add" method="post">
+                        <div class="form-group">
+                            <label for="">ชื่อประเภทสินค้า</label>
+                            <input type="text" name="title" value="" class="form-control">
+                        </div>
+                        <input type="submit" name="" value="บันทึกข้อมูล" class="btn btn-success">
+                    </form>
+                </div><!-- /.row -->
+            </div><!-- /.col-lg-9 -->
+        </div>
+</body>
+</html>
