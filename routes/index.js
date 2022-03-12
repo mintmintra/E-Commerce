@@ -6,8 +6,13 @@ var db = require('monk')('localhost:27017/E-CommerceDB');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var categories = db.get('categories');
-  categories.find({}, {}, function (err, category) {
-    res.render('index', { categories: category });
+  var products = db.get('products');
+  products.find({}, {}, function (err, product) {
+    categories.find({}, {}, function (err, category) {
+      res.render('index', {
+        categories: category, products:product
+      });
+  })
   })
 });
 
