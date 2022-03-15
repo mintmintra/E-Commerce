@@ -22,6 +22,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.locals.descriptionText = function (text, length) {
+    return text.substring(0, length);
+}
+
 app.use('/', indexRouter);
 app.use('/categories', categoryRouter);
 app.use('/products', productRouter);
