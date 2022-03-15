@@ -26,6 +26,10 @@ app.locals.descriptionText = function (text, length) {
     return text.substring(0, length);
 }
 
+app.locals.formatMoney = function(number){
+    return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
+
 app.use('/', indexRouter);
 app.use('/categories', categoryRouter);
 app.use('/products', productRouter);

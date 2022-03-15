@@ -15,6 +15,18 @@ router.get('/add', function (req, res, next) {
   })
 });
 
+router.get('/show/:id', function(req, res, next) {
+  var categories = db.get('categories');
+    var products = db.get('products');
+  products.find(req.params.id, {}, function(err, product) {
+    categories.find({}, {}, function(err, category) {
+      res.render('show', {
+        categories: category,products:product
+      });
+    })
+  })
+});
+
 router.post('/add', [
     check('name','กรุณาป้อนชื่อสินค้า').not().isEmpty(),
     check('description', 'กรุณาป้อนรายละเอียดสินค้า').not().isEmpty(),
