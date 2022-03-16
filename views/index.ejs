@@ -30,7 +30,10 @@
                 </p>
               </div>
               <div class="card-footer">
-                <a href="#" class="btn btn-success">เพิ่มลงตะกร้า</a>
+                <form class="form-group" action="/products/cart/" method="post">
+                    <input type="hidden" name="product_id" value="<%=product._id %>">
+                    <input type="submit" name="" value="เพิ่มลงตะกร้า" class="btn btn-success">
+                </form>
               </div>
             </div>
           </div>

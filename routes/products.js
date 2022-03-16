@@ -27,6 +27,89 @@ router.get('/show/:id', function(req, res, next) {
   })
 });
 
+router.get('/show/', function(req, res, next) {
+  var categories = db.get('categories');
+  var products = db.get('products');
+  var categoryname = req.query.category
+  if (categoryname) {
+    products.find({
+      category: categoryname
+    }, {}, function(err, product) {
+      categories.find({}, {}, function(err, category) {
+        res.render('searchproduct', {
+          categories: category,
+          products: product
+        });
+      })
+    })
+  }
+});
+
+router.post('/cart/', function (req, res, next) {
+  var products = db.get('products');
+  var product_id = req.body.product_id;
+  req.session.cart = req.session.cart || {};
+  var cart = req.session.cart; //ตะกร้าสินค้า
+  products.find({
+      _id: product_id
+  }, {}, function (err, product) {
+       //กรณีซื้อชิ้นเดิมมากกว่า 1 ชิ้น
+    if (cart[product_id]) {
+      cart[product_id].qty++;
+    } else {
+      //ซื้อสินค้าครั้งแรก
+      product.forEach(function (item) {
+        cart[product_id] = {
+        item: item._id,
+        title: item.name,
+        price: item.price,
+        qty:1
+      }
+      })
+    }
+    console.log(cart);
+    res.redirect('/');
+  })
+});
+
+router.post('/cart/', function (req, res, next) {
+  var products = db.get('products');
+  var product_id = req.body.product_id;
+  req.session.cart = req.session.cart || {};
+  var cart = req.session.cart; //ตะกร้าสินค้า
+  products.find({
+      _id: product_id
+  }, {}, function (err, product) {
+       //กรณีซื้อชิ้นเดิมมากกว่า 1 ชิ้น
+    if (cart[product_id]) {
+      cart[product_id].qty++;
+    } else {
+      //ซื้อสินค้าครั้งแรก
+      product.forEach(function (item) {
+        cart[product_id] = {
+        item: item._id,
+        title: item.name,
+        price: item.price,
+        qty:1
+      }
+      })
+    }
+    res.redirect('/');
+  })
+});
+
+router.get('/cart', function (req, res, next) {
+  var cart = req.session.cart; //ตะกร้าสินค้า
+  var displayCart = { items: [], total: 0 };
+  var total = 0;
+  for (item in cart) {
+    displayCart.items.push(cart[item]);
+    total += (cart[item].qty * cart[item].price);
+  }
+  displayCart.total = total;
+  res.render('cart', { cart: displayCart });
+});
+
 router.post('/add', [
     check('name','กรุณาป้อนชื่อสินค้า').not().isEmpty(),
     check('description', 'กรุณาป้อนรายละเอียดสินค้า').not().isEmpty(),
