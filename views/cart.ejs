@@ -4,10 +4,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ตะกร้าสินค้า</title>
 </head>
 <body>
-    <h2>ตะกร้าสินค้า</h2>
-    <%= cart.total %>
+    <%- include('layout'); -%>
+    <div class="container my-4">
+        <% if(cart.items.length>0) { %>
+        <h3>ตะกร้าสินค้า</h3>
+        <table class="table my-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">รหัสสินค้า</th>
+                    <th scope="col">ชื่อสินค้า</th>
+                    <th scope="col">จำนวน</th>
+                    <th scope="col">ราคา</th>
+                    <th scope="col">รวม</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%cart.items.forEach(function(product) { %>
+                    <tr>
+                        <td>
+                            <a href="/products/show/<%= product.item %>"><%= product.item %></a>
+                        </td>
+                        <th><%= product.title %></th>
+                        <td><%= product.qty %></td>
+                        <td><%= formatMoney(product.price) %></td>
+                        <th><%= formatMoney(product.price * product.qty) %></th>
+                    </tr>
+               <% }) %>
+            </tbody>
+        </table>
+        <h2 class="text-right">ราคารวม : <%= formatMoney(cart.total) %> บาท</h2>
+        <form class="form-group" action="/payment" method="post">
+            <script
+             src="http://checkout.stripe.com/checkout.js"
+             class="stripe-button"
+             data-name="Mint Shop"
+             data-key="pk_test_51KeBqOFzFAMf3PkM3KtB7NwrjwDBdWvqeyb7UaRO0u4LHBlcZ3CzGjgkHvfLKyytBTIjG4uztHTLfgGlJbsjtwZk004anOQHog"
+             data-description="Mint Mint Shop"
+             data-amount="<%= cart.total*100 %>"
+             data-currency="thb"
+             ></script>
+             <input type="hidden" name="amount" value="<%= cart.total*100 %>">
+        </form>
+        <% } else { %>
+            <div class="alert alert-danger">
+                ไม่มีสินค้าในตะกร้า
+            </div>
+       <% } %>
+    </div>
 </body>
 </html>

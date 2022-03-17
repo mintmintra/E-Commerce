@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><% products.forEach(function(product){ %>
+        <%= product.name %>
+        <% }) %>
+    </title>
 </head>
 <body>
     <!-- Page Content -->
@@ -23,7 +26,10 @@
                         <h3 class="card-title">ชื่อสินค้า : <%= product.name %></h3>
                         <h4>ราคา : ฿<%= formatMoney(product.price) %></h4>
                         <p class="card-text"><%= product.description %></p>
-                            <button type="button" name="button" class="btn btn-success">เพิ่มลงตะกร้า</button>
+                            <form class="form-group" action="/products/cart/" method="post">
+                                <input type="hidden" name="product_id" value="<%=product._id%>">
+                                <input type="submit" name="" value="เพิ่มลงตะกร้า" class="btn btn-success">
+                            </form>
                     </div>
                 </div>
                 <% }) %>

@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var categoryRouter = require('./routes/categories');
 var productRouter = require('./routes/products');
 var session = require('express-session');
+var stripe = require('stripe')('sk_test_51KeBqOFzFAMf3PkMqjhYKDDGRH13uY9S5lRCMfe1kfoI8CeraHg435KWx11HM3pRxw4mu4gIjDE8LkTycxUBSa8s00AgCjxkqw');
 var app = express();
 
 
@@ -36,6 +37,20 @@ app.locals.descriptionText = function (text, length) {
 app.locals.formatMoney = function(number){
     return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
+
+app.post('/payment', function (req, res) {
+  var token = req.body.stripeToken;
+  var amount = req.body.amount;
+  var charge = stripe.charges.create({
+    amount: amount,
+    currency: "thb",
+    source: token
+  }, function (err, charge) {
+    if (err) throw err
+  });
+  req.session.destroy();
+  res.redirect("/")
+})
 
 app.use('/', indexRouter);
 app.use('/categories', categoryRouter);
